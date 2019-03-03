@@ -28,17 +28,3 @@ print(f"Fuel const: {fuel_const}")
 
 pw = (ve * map / (iat + 273)) * fuel_const
 print(f"Pulse width(one const): {pw} ms\n")
-
-
-#-----------------------------------------------------------------------
-
-# int without division
-iat_enrich = int((1 / (iat + 273)) * 256 * 256 * 256) # use lookup table in actual implemenation
-print(f"Intake air temperature enrichment: {iat_enrich}")
-
-pw = int(ve * map * iat_enrich * fuel_const) >> 20; # fixed point with 4 fractional bits
-print(f"Pulse width(int, no div): {pw/16} ms\n")
-
-max_rpm = int((1/(pw/64))*60*1000)
-print(f"Max RPM: {max_rpm}")
-
