@@ -10,10 +10,15 @@ class Engine:
 		self.map = 1
 		self.iat = 22
 		self.cht = 90
+		self.o2 = 1
 		
 		self.ve = 0.8
 		self.afr = 14.7
-		self.warm = 1	
+		self.warm = 1
+		self.pw = 0
+		
+		self.rpm = 0
+		self.adv = 0
 		
 	def read_adc(self):
 		# in real implementation we would sample each adc channel
@@ -23,6 +28,10 @@ class Engine:
 		pass
 	
 	def calc_vars(self):
+		#self.ve = lookup_table_you_idiot
+		#self.afr = lookup_table2
+		#self.warm = lookup_2d_table3
+		#self.warm = lookup_2d_table3
 		pass
 	
 	def calc_fuel(self):
@@ -34,6 +43,9 @@ class Engine:
 		air_mass = (self.ve * self.map * self.disp) / (gas_const * (self.iat + 273)) * air_mole_mass
 	
 		# injector open time in miliseconds
-		pw = air_mass / (self.afr * fuel_density * self.injector_flow) * 60 * 100
+		self.pw = air_mass / (self.afr * fuel_density * self.injector_flow) * 60 * 100
 
-		return pw
+		return self.pw
+		
+	def calc_ign(self):
+		pass
