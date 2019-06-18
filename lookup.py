@@ -1,3 +1,12 @@
+class Table1D:
+	def __init__(self):
+		self.axis = [x for x in range(16)]
+		self.data = [0 for x in range(16)]
+		
+class Table2D:
+	def __init__(self):
+		self.axis = [[y for y in range(16)] for x in range(2)]
+		self.data = [[0 for y in range(16)] for x in range(16)]
 
 def lookup_1D(table, arg):
 
@@ -31,13 +40,20 @@ def lookup_2D(table, x, y):
 	elif y > table.axis[1][15]:
 		y = table.axis[1][15]
 
-	for i in range(len(table.axis[0])):
+	valuex = 0
+	valuey = 0
+	deltax0 = 0
+	deltax1 = 0
+	deltay0 = 0
+	deltay1 = 0
+
+	for i in range(len(table.axis[0]) - 1):
 		if x >= table.axis[0][i] and x < table.axis[0][i + 1]:
 			valuex = i
 			deltax0 = x - table.axis[0][i]
 			deltax1 = table.axis[0][i + 1] - x
 
-	for i in range(len(table.axis[1])):
+	for i in range(len(table.axis[1]) - 1):
 		if y >= table.axis[1][i] and y < table.axis[1][i + 1]:
 			valuey = i
 			deltay0 = y - table.axis[1][i]

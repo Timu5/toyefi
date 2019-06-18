@@ -1,11 +1,14 @@
+from lookup import *
 
 class Engine:
 	
 	def __init__(self):
 		self.disp = 500
 		self.injector_flow = 315
+		self.injector_deadtime = 1 # ms
 		
-		self.rpm = 0
+		self.table_ve = Table2D()
+		self.table_warm = Table1D()
 		
 		self.map = 1
 		self.iat = 22
@@ -25,13 +28,13 @@ class Engine:
 		pass
 		
 	def convert_raw(self):
+		# convert raw adc reading into smth more usable
 		pass
 	
 	def calc_vars(self):
-		#self.ve = lookup_table_you_idiot
+		self.ve = lookup_2D(self.table_ve, self.rpm, self.map)
+		self.warm = lookup_1D(self.table_warm, self.cht)
 		#self.afr = lookup_table2
-		#self.warm = lookup_2d_table3
-		#self.warm = lookup_2d_table3
 		pass
 	
 	def calc_fuel(self):
@@ -43,8 +46,10 @@ class Engine:
 		air_mass = (self.ve * self.map * self.disp) / (gas_const * (self.iat + 273)) * air_mole_mass
 	
 		# injector open time in miliseconds
-		self.pw = air_mass / (self.afr * fuel_density * self.injector_flow) * 60 * 100
-
+		self.pw = air_mass / (self.afr * fuel_density * self.injector_flow) * 60 * 100 # base fuel
+		self.pw *= self.warm
+		self.pw += self.injector_deadtime
+		
 		return self.pw
 		
 	def calc_ign(self):
