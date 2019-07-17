@@ -46,9 +46,10 @@ class Engine:
 		air_mass = (self.ve * self.map * self.disp) / (gas_const * (self.iat + 273)) * air_mole_mass
 	
 		# injector open time in miliseconds
-		self.pw = air_mass / (self.afr * fuel_density * self.injector_flow) * 60 * 100 # base fuel
-		self.pw *= self.warm
-		self.pw += self.injector_deadtime
+		base_pw = air_mass / (self.afr * fuel_density * self.injector_flow) * 60 * 100
+
+		# final pulse width is calulated from base pulsewidth, enrichments and injector deadtime
+		self.pw = base_pw * self.warm + self.injector_deadtime
 		
 		return self.pw
 		
