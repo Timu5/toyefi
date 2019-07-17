@@ -9,6 +9,7 @@ class Engine:
 		
 		self.table_ve = Table2D()
 		self.table_warm = Table1D()
+		self.table_ign = Table2D()
 		
 		self.map = 1 # bar
 		self.iat = 22 # °C
@@ -35,7 +36,6 @@ class Engine:
 		self.ve = lookup_2D(self.table_ve, self.rpm, self.map)
 		self.warm = lookup_1D(self.table_warm, self.cht)
 		#self.afr = lookup_table2
-		pass
 	
 	def calc_fuel(self):
 		air_mole_mass = 28.97    # g/mol
@@ -53,4 +53,4 @@ class Engine:
 		return self.pw
 		
 	def calc_ign(self):
-		pass
+		self.adv = lookup_2D(self.table_ign, self.rpm, self.map)
