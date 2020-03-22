@@ -4,9 +4,11 @@ class Engine:
 	
 	def __init__(self):
 		# const
-		self.disp = 500 # cc
+		self.cyls = 4 # number of cylinders
+		self.disp = 500 # cc per cylinder
 		self.injector_flow = 315 # cc/min
 		self.injector_deadtime = 1 # ms
+		self.mafless = False
 		
 		# tables
 		self.table_ve = Table2D()
@@ -15,6 +17,7 @@ class Engine:
 		self.table_afr = Table2D()
 		
 		# data from sensors
+		self.maf = 10 # g/s
 		self.map = 1 # bar
 		self.iat = 22 # °C
 		self.cht = 90 # °C
@@ -45,10 +48,14 @@ class Engine:
 		air_mole_mass = 28.97    # g/mol
 		gas_const =  8.314459848 # (cm3*bar)/(mol*K) | gas constant
 		fuel_density = 0.740     # g/cm3
-
-		# air mass in grams
-		air_mass = (self.ve * self.map * self.disp) / (gas_const * (self.iat + 273)) * air_mole_mass
-	
+		
+		air_mass = 0 # air mass in grams
+		
+		if self.mafless:
+			air_mass = (self.ve * self.map * self.disp) / (gas_const * (self.iat + 273)) * air_mole_mass
+		else:
+			air_mass = (self.maf / (self.rpm * self.cyls)) / (gas_const * (self.iat + 273)) * air_mole_mass
+		
 		# injector open time in miliseconds
 		base_pw = air_mass / (self.afr * fuel_density * self.injector_flow) * 60 * 100
 
